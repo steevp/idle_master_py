@@ -118,7 +118,7 @@ def chillOut(appID):
 		time.sleep(5*60)
 		try:
 			rBadge = requests.get(myProfileURL+"/gamecards/" + str(appID) + "/",cookies=cookies)
-			indBadgeData = bs4.BeautifulSoup(rBadge.text)
+			indBadgeData = bs4.BeautifulSoup(rBadge.text, "lxml")
 			badgeLeftString = indBadgeData.find_all("span",{"class": "progress_info_bold"})[0].contents[0]
 			if "card drops" in badgeLeftString:
 				stillDown = False
@@ -168,7 +168,7 @@ except:
 
 try:
 	badgesLeft = []
-	badgePageData = bs4.BeautifulSoup(r.text)
+	badgePageData = bs4.BeautifulSoup(r.text, "lxml")
 	badgeSet = badgePageData.find_all("div",{"class": "badge_title_stats"})
 except:
 	logging.warning(Fore.RED + "Error finding drop info" + Fore.RESET)
@@ -183,7 +183,7 @@ try:
 		currentpage = 2
 		while currentpage <= badgePages:
 			r = requests.get(myProfileURL+"/badges/?p="+str(currentpage),cookies=cookies)
-			badgePageData = bs4.BeautifulSoup(r.text)
+			badgePageData = bs4.BeautifulSoup(r.text, "lxml")
 			badgeSet = badgeSet + badgePageData.find_all("div",{"class": "badge_title_stats"})
 			currentpage = currentpage + 1
 except:
@@ -276,7 +276,7 @@ for appID, drops, value in games:
 
 			logging.warning("Checking to see if " + getAppName(appID) + " has remaining card drops")
 			rBadge = requests.get(myProfileURL + "/gamecards/" + str(appID) + "/",cookies=cookies)
-			indBadgeData = bs4.BeautifulSoup(rBadge.text)
+			indBadgeData = bs4.BeautifulSoup(rBadge.text, "lxml")
 			badgeLeftString = indBadgeData.find_all("span",{"class": "progress_info_bold"})[0].contents[0]
 			if "No card drops" in badgeLeftString:
 				logging.warning("No card drops remaining")
